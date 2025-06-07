@@ -1,5 +1,6 @@
 package com.anth.applicationtracker.controller;
 
+import com.anth.applicationtracker.exception.ApplicationIdMismatchException;
 import com.anth.applicationtracker.exception.ApplicationNotFoundException;
 import com.anth.applicationtracker.model.Application;
 import com.anth.applicationtracker.repo.ApplicationRepository;
@@ -45,7 +46,7 @@ public class ApplicationController {
         if (!Objects.equals(application.getId(), id)) {
             throw new ApplicationIdMismatchException();
         }
-        applicationRepository.findById(id).orElseThrow(ApplcationNotFoundException::new);
+        applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
         return applicationRepository.save(application);
     }
 }
