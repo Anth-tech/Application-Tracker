@@ -19,8 +19,9 @@ public class Application {
     @Column(nullable = false)
     private String submissionSite;
 
-    @Column(nullable = false)
-    private String companyName;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="company_id")
+    private Company company;
 
     @Column(nullable = false)
     private String response;
@@ -34,14 +35,15 @@ public class Application {
     @Column(nullable = false)
     private Date submitDate;
 
+
     public Application() {
     }
-    public Application(String jobTitle, String location, String submissionSite, String companyName, String response,
+    public Application(String jobTitle, String location, String submissionSite, Company company, String response,
                        String jobType, String submissionStatus, Date submitDate) {
         this.jobTitle = jobTitle;
         this.location = location;
         this.submissionSite = submissionSite;
-        this.companyName = companyName;
+        this.company = company;
         this.response = response;
         this.jobType = jobType;
         this.submissionStatus = submissionStatus;
@@ -60,8 +62,8 @@ public class Application {
     public String getSubmissionSite() {
         return submissionSite;
     }
-    public String getCompanyName() {
-        return companyName;
+    public Company getCompany() {
+        return company;
     }
     public String getResponse() {
         return response;
@@ -84,8 +86,8 @@ public class Application {
     public void setSubmissionSite(String submissionSite) {
         this.submissionSite = submissionSite;
     }
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setCompany(Company company) {
+        this.company = company;
     }
     public void setResponse(String response) {
         this.response = response;
