@@ -34,7 +34,7 @@ public class Company {
         this.companyWebsite = companyWebsite;
     }
 
-    public Long getCompanyid() {
+    public Long getId() {
         return companyid;
     }
     public String getCompanyName() {
