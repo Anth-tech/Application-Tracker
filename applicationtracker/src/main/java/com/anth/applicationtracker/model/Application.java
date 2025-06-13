@@ -1,45 +1,51 @@
 package com.anth.applicationtracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
+@Table(name = "application")
 public class Application {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "job_title")
     private String jobTitle;
 
-    @Column(nullable = false)
+    @Column(name = "location")
     private String location;
 
-    @Column(nullable = false)
+    @Column(name = "submission_site")
     private String submissionSite;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="company_id")
-    private Company company;
-
-    @Column(nullable = false)
+    @Column(name = "response")
     private String response;
 
-    @Column(nullable = false)
+    @Column(name = "job_type")
     private String jobType;
 
-    @Column(nullable = false)
+    @Column(name = "submission_status")
     private String submissionStatus;
 
-    @Column(nullable = false)
+    @Column(name = "submit_date")
     private Date submitDate;
 
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company company;
 
-    public Application() {
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "appuser_id", referencedColumnName = "id")
+    private AppUser appUser;
+
+
+    protected Application() {
     }
     public Application(String jobTitle, String location, String submissionSite, Company company, String response,
-                       String jobType, String submissionStatus, Date submitDate) {
+                       String jobType, String submissionStatus, Date submitDate, AppUser appUser) {
         this.jobTitle = jobTitle;
         this.location = location;
         this.submissionSite = submissionSite;
@@ -48,7 +54,14 @@ public class Application {
         this.jobType = jobType;
         this.submissionStatus = submissionStatus;
         this.submitDate = submitDate;
+        this.appUser = appUser;
     }
+
+//    @Override
+//    public String toString() {
+//        StringBuilder sb = new StringBuilder();
+//        return "";
+//    }
 
     public Long getId() {
         return id;
@@ -65,6 +78,9 @@ public class Application {
     public Company getCompany() {
         return company;
     }
+    public AppUser getAppUser() {
+        return appUser;
+    }
     public String getResponse() {
         return response;
     }
@@ -77,6 +93,7 @@ public class Application {
     public Date getSubmitDate() {
         return submitDate;
     }
+
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
     }

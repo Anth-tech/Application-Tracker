@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseBody
-    @ExceptionHandler({ApplicationNotFoundException.class, ApplicationIdMismatchException.class})
+    @ExceptionHandler({NotFoundException.class, IdMismatchException.class})
     public ResponseEntity<?> handleControllerException(HttpServletRequest request, Throwable ex) {
         HttpStatus status = getStatus(request);
         return new ResponseEntity<>(new ErrorResponse(status.value(), ex.getMessage(), request.getRequestURI()), status);

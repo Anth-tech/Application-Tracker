@@ -2,6 +2,7 @@ package com.anth.applicationtracker;
 
 import com.anth.applicationtracker.model.Application;
 import com.anth.applicationtracker.model.Company;
+import com.anth.applicationtracker.repo.AppUserRepository;
 import com.anth.applicationtracker.repo.ApplicationRepository;
 import com.anth.applicationtracker.repo.CompanyRepository;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,13 @@ public class ApplicationtrackerApplication {
 	private static final Logger logger = LoggerFactory.getLogger(ApplicationtrackerApplication.class);
 	private final ApplicationRepository applicationRepository;
 	private final CompanyRepository companyRepository;
+	private final AppUserRepository appUserRepository;
 
-	public ApplicationtrackerApplication(ApplicationRepository applicationRepository, CompanyRepository companyRepository) {
+	public ApplicationtrackerApplication(ApplicationRepository applicationRepository,
+										 CompanyRepository companyRepository, AppUserRepository appUserRepository) {
 		this.applicationRepository = applicationRepository;
 		this.companyRepository = companyRepository;
+		this.appUserRepository = appUserRepository;
 	}
 
 	public static void main(String[] args) {

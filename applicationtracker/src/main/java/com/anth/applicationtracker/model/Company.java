@@ -7,25 +7,26 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "company")
 public class Company {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long companyid;
 
-    @Column(nullable=false, unique=true)
+    @Column(name = "company_name")
     private String companyName;
 
-    @Column(nullable=false)
+    @Column(name = "company_email")
     private String companyEmail;
 
-    @Column(nullable=false)
+    @Column(name = "company_location")
     private String companyLocation;
 
-    @Column(nullable=false)
+    @Column(name = "company_website")
     private String companyWebsite;
 
-    public Company() {}
+    protected Company() {}
     public Company(String companyName, String companyEmail, String companyLocation, String companyWebsite) {
         this.companyName = companyName;
         this.companyEmail = companyEmail;

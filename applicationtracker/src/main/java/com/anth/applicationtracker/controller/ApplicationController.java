@@ -1,12 +1,11 @@
 package com.anth.applicationtracker.controller;
 
-import com.anth.applicationtracker.exception.ApplicationIdMismatchException;
-import com.anth.applicationtracker.exception.ApplicationNotFoundException;
+import com.anth.applicationtracker.exception.IdMismatchException;
+import com.anth.applicationtracker.exception.NotFoundException;
 import com.anth.applicationtracker.model.Application;
 import com.anth.applicationtracker.repo.ApplicationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.Objects;
 
@@ -26,7 +25,7 @@ public class ApplicationController {
 
     @GetMapping("/{id}")
     public Application findOne(@PathVariable Long id) {
-        return applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
+        return applicationRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping
@@ -37,16 +36,16 @@ public class ApplicationController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
+        applicationRepository.findById(id).orElseThrow(NotFoundException::new);
         applicationRepository.deleteById(id);
     }
 
     @PutMapping("/{id}")
     public Application updateApplication(@RequestBody Application application, @PathVariable Long id) {
         if (!Objects.equals(application.getId(), id)) {
-            throw new ApplicationIdMismatchException();
+            throw new IdMismatchException();
         }
-        applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
+        applicationRepository.findById(id).orElseThrow(NotFoundException::new);
         return applicationRepository.save(application);
     }
 }
