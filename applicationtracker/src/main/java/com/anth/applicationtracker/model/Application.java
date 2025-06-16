@@ -56,11 +56,6 @@ public class Application {
         this.appUser = appUser;
     }
 
-//    @Override
-//    public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        return "";
-//    }
 
     public Long getId() {
         return id;
@@ -105,6 +100,7 @@ public class Application {
     public void setCompany(Company company) {
         this.company = company;
     }
+    public void setAppUser(AppUser appUser) { this.appUser = appUser; }
     public void setResponse(String response) {
         this.response = response;
     }
