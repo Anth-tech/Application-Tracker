@@ -43,19 +43,17 @@ public class Application {
 
     protected Application() {
     }
-    public Application(String jobTitle, String location, String submissionSite, Company company, String response,
-                       String jobType, String submissionStatus, Date submitDate, AppUser appUser) {
-        this.jobTitle = jobTitle;
-        this.location = location;
-        this.submissionSite = submissionSite;
-        this.company = company;
-        this.response = response;
-        this.jobType = jobType;
-        this.submissionStatus = submissionStatus;
-        this.submitDate = submitDate;
-        this.appUser = appUser;
+    private Application(Builder builder) {
+        this.jobTitle = builder.jobTitle;
+        this.location = builder.location;
+        this.submissionSite = builder.submissionSite;
+        this.company = builder.company;
+        this.response = builder.response;
+        this.jobType = builder.jobType;
+        this.submissionStatus = builder.submissionStatus;
+        this.submitDate = builder.submitDate;
+        this.appUser = builder.appUser;
     }
-
 
     public Long getId() {
         return id;
@@ -100,7 +98,9 @@ public class Application {
     public void setCompany(Company company) {
         this.company = company;
     }
-    public void setAppUser(AppUser appUser) { this.appUser = appUser; }
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
     public void setResponse(String response) {
         this.response = response;
     }
@@ -112,5 +112,58 @@ public class Application {
     }
     public void setSubmitDate(Date submitDate) {
         this.submitDate = submitDate;
+    }
+
+    public static class Builder {
+        private String jobTitle;
+        private String jobType;
+        private String location;
+        private String submissionSite;
+        private Company company;
+        private String response;
+        private String submissionStatus;
+        private Date submitDate;
+        private AppUser appUser;
+
+        public Builder jobTitle(String jobTitle) {
+            this.jobTitle = jobTitle;
+            return this;
+        }
+        public Builder jobType(String jobType) {
+            this.jobType = jobType;
+            return this;
+        }
+        public Builder location(String location) {
+            this.location = location;
+            return this;
+        }
+        public Builder submissionSite(String submissionSite) {
+            this.submissionSite = submissionSite;
+            return this;
+        }
+        public Builder company(Company company) {
+            this.company = company;
+            return this;
+        }
+        public Builder response(String response) {
+            this.response = response;
+            return this;
+        }
+        public Builder submissionStatus(String submissionStatus) {
+            this.submissionStatus = submissionStatus;
+            return this;
+        }
+        public Builder submitDate(Date submitDate) {
+            this.submitDate = submitDate;
+            return this;
+        }
+        public Builder appUser(AppUser appUser) {
+            this.appUser = appUser;
+            return this;
+        }
+
+        public Application build() {
+            return new Application(this);
+        }
     }
 }

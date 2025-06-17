@@ -27,7 +27,7 @@ public class ApplicationController {
 
     private final ApplicationRepository applicationRepository;
     private final AppUserRepository appUserRepository;
-    public ApplicationController(ApplicationRepository applicationRepository, AppUserRepository appUserRepository) {
+    private ApplicationController(ApplicationRepository applicationRepository, AppUserRepository appUserRepository) {
         this.applicationRepository = applicationRepository;
         this.appUserRepository = appUserRepository;
     }
@@ -49,16 +49,15 @@ public class ApplicationController {
         Optional<Application> applicationOptional = Optional.ofNullable(applicationRepository.findByIdAndAppUser_Username(id, principal.getName()));
         if (applicationOptional.isPresent()) {
             return ResponseEntity.ok(applicationOptional.get());
-        } else {
-            throw new NotFoundException();
         }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
     private ResponseEntity<Void> createApplication(@RequestBody Application newApplicationRequest, UriComponentsBuilder ucb, Principal principal) {
         Optional<AppUser> currentUser = appUserRepository.findByUsername(principal.getName());
         if (currentUser.isEmpty()) {
-            throw new NotFoundException();
+            return ResponseEntity.notFound().build();
         }
         newApplicationRequest.setAppUser(currentUser.get());
         Application savedApplication = applicationRepository.save(newApplicationRequest);
@@ -70,16 +69,13 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    private void delete(@PathVariable Long id) {
         applicationRepository.findById(id).orElseThrow(NotFoundException::new);
         applicationRepository.deleteById(id);
     }
 
     @PutMapping("/{id}")
-    public Application updateApplication(@RequestBody Application application, @PathVariable Long id) {
-        if (!Objects.equals(application.getId(), id)) {
-            throw new IdMismatchException();
-        }
+    private Application updateApplication(@RequestBody Application application, @PathVariable Long id, Principal principal) {
         applicationRepository.findById(id).orElseThrow(NotFoundException::new);
         return applicationRepository.save(application);
     }
