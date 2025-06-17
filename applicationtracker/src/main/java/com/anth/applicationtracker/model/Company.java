@@ -27,11 +27,11 @@ public class Company {
     private String companyWebsite;
 
     protected Company() {}
-    public Company(String companyName, String companyEmail, String companyLocation, String companyWebsite) {
-        this.companyName = companyName;
-        this.companyEmail = companyEmail;
-        this.companyLocation = companyLocation;
-        this.companyWebsite = companyWebsite;
+    private Company(Builder builder) {
+        this.companyName = builder.companyName;
+        this.companyEmail = builder.companyEmail;
+        this.companyLocation = builder.companyLocation;
+        this.companyWebsite = builder.companyWebsite;
     }
 
     public Long getId() {
@@ -61,5 +61,33 @@ public class Company {
     }
     public void setCompanyWebsite(String companyWebsite) {
         this.companyWebsite = companyWebsite;
+    }
+
+    public static class Builder {
+        private String companyName;
+        private String companyEmail;
+        private String companyLocation;
+        private String companyWebsite;
+
+        public Builder companyName(String companyName) {
+            this.companyName = companyName;
+            return this;
+        }
+        public Builder companyEmail(String companyEmail) {
+            this.companyEmail = companyEmail;
+            return this;
+        }
+        public Builder companyLocation(String companyLocation) {
+            this.companyLocation = companyLocation;
+            return this;
+        }
+        public Builder companyWebsite(String companyWebsite) {
+            this.companyWebsite = companyWebsite;
+            return this;
+        }
+
+        public Company build() {
+            return new Company(this);
+        }
     }
 }
