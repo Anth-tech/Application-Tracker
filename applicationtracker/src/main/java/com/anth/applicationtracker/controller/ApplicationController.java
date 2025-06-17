@@ -46,11 +46,12 @@ public class ApplicationController {
 
     @GetMapping("/{id}")
     private ResponseEntity<Application> findById(@PathVariable Long id, Principal principal) {
-        Optional<Application> applicationOptional = Optional.ofNullable(applicationRepository.findByIdAndAppUser_Username(id, principal.getName()));
-        if (applicationOptional.isPresent()) {
-            return ResponseEntity.ok(applicationOptional.get());
+        Application application = findApplication(id, principal);
+        if (application != null) {
+            return ResponseEntity.ok(application);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -75,8 +76,29 @@ public class ApplicationController {
     }
 
     @PutMapping("/{id}")
-    private Application updateApplication(@RequestBody Application application, @PathVariable Long id, Principal principal) {
-        applicationRepository.findById(id).orElseThrow(NotFoundException::new);
-        return applicationRepository.save(application);
+    private ResponseEntity<Void> updateApplication(@RequestBody Application applicationUpdated, @PathVariable Long id, Principal principal) {
+        Application applicationExisting = findApplication(id, principal);
+        if (applicationExisting != null && Objects.equals(applicationExisting.getId(), id)) {
+            applicationRepository.save(updateApplication(applicationExisting, applicationUpdated));
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    private Application findApplication(Long id, Principal principal) {
+        return applicationRepository.findByIdAndAppUser_Username(id, principal.getName());
+    }
+
+    private Application updateApplication(Application prevApplication, Application newApplication) {
+        prevApplication.setJobTitle(newApplication.getJobTitle());
+        prevApplication.setLocation(newApplication.getLocation());
+        prevApplication.setSubmissionSite(newApplication.getSubmissionSite());
+        prevApplication.setCompany(newApplication.getCompany());
+        prevApplication.setResponse(newApplication.getResponse());
+        prevApplication.setJobType(newApplication.getJobType());
+        prevApplication.setSubmissionStatus(newApplication.getSubmissionStatus());
+        prevApplication.setSubmitDate(newApplication.getSubmitDate());
+        return prevApplication;
     }
 }
