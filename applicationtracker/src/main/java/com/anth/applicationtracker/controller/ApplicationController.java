@@ -70,9 +70,14 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    private void delete(@PathVariable Long id) {
-        applicationRepository.findById(id).orElseThrow(NotFoundException::new);
-        applicationRepository.deleteById(id);
+    private ResponseEntity<Void> deleteApplication(@PathVariable Long id, Principal principal) {
+        Application application = findApplication(id, principal);
+        if (application != null) {
+            applicationRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
