@@ -3,7 +3,6 @@ package com.anth.applicationtracker.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -26,12 +25,17 @@ public class Company {
     @Column(name = "company_website")
     private String companyWebsite;
 
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "appuser_id", referencedColumnName = "id")
+    private AppUser appUser;
+
     protected Company() {}
     private Company(Builder builder) {
         this.companyName = builder.companyName;
         this.companyEmail = builder.companyEmail;
         this.companyLocation = builder.companyLocation;
         this.companyWebsite = builder.companyWebsite;
+        this.appUser = builder.appUser;
     }
 
     public Long getId() {
@@ -49,6 +53,7 @@ public class Company {
     public String getCompanyWebsite() {
         return companyWebsite;
     }
+    public AppUser getAppUser() { return appUser; }
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
@@ -62,12 +67,16 @@ public class Company {
     public void setCompanyWebsite(String companyWebsite) {
         this.companyWebsite = companyWebsite;
     }
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
 
     public static class Builder {
         private String companyName;
         private String companyEmail;
         private String companyLocation;
         private String companyWebsite;
+        private AppUser appUser;
 
         public Builder companyName(String companyName) {
             this.companyName = companyName;
@@ -83,6 +92,10 @@ public class Company {
         }
         public Builder companyWebsite(String companyWebsite) {
             this.companyWebsite = companyWebsite;
+            return this;
+        }
+        public Builder appUser(AppUser appUser) {
+            this.appUser = appUser;
             return this;
         }
 

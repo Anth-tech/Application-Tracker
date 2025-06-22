@@ -1,7 +1,5 @@
 package com.anth.applicationtracker.controller;
 
-import com.anth.applicationtracker.exception.IdMismatchException;
-import com.anth.applicationtracker.exception.NotFoundException;
 import com.anth.applicationtracker.model.AppUser;
 import com.anth.applicationtracker.model.Application;
 import com.anth.applicationtracker.repo.AppUserRepository;
@@ -10,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -84,7 +81,7 @@ public class ApplicationController {
     private ResponseEntity<Void> updateApplication(@RequestBody Application applicationUpdated, @PathVariable Long id, Principal principal) {
         Application applicationExisting = findApplication(id, principal);
         if (applicationExisting != null && Objects.equals(applicationExisting.getId(), id)) {
-            applicationRepository.save(updateApplication(applicationExisting, applicationUpdated));
+            applicationRepository.save(updateApplicationHelper(applicationExisting, applicationUpdated));
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -95,7 +92,7 @@ public class ApplicationController {
         return applicationRepository.findByIdAndAppUser_Username(id, principal.getName());
     }
 
-    private Application updateApplication(Application prevApplication, Application newApplication) {
+    private Application updateApplicationHelper(Application prevApplication, Application newApplication) {
         prevApplication.setJobTitle(newApplication.getJobTitle());
         prevApplication.setLocation(newApplication.getLocation());
         prevApplication.setSubmissionSite(newApplication.getSubmissionSite());
