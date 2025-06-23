@@ -1,5 +1,6 @@
 package com.anth.applicationtracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +22,7 @@ public class AppUser {
     @Column(name = "username", unique = true)
     private String username;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
@@ -28,13 +30,12 @@ public class AppUser {
     private String role;
 
     protected AppUser() {}
-    public AppUser(String firstName, String lastName, String email, String username, String password, String role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.role = role;
+    private AppUser(Builder builder) {
+        this.firstName = builder.firstName;
+        this.lastName = builder.lastName;
+        this.email = builder.email;
+        this.username = builder.username;
+        this.role = builder.role;
     }
 
     public Long getId() {
@@ -75,5 +76,38 @@ public class AppUser {
     }
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public static class Builder {
+        private String firstName;
+        private String lastName;
+        private String username;
+        private String email;
+        private String role;
+
+        public Builder firstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+        public Builder lastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+        public Builder role(String role) {
+            this.role = role;
+            return this;
+        }
+
+        public AppUser build() {
+            return new AppUser(this);
+        }
     }
 }

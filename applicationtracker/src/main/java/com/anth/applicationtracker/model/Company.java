@@ -1,7 +1,7 @@
 package com.anth.applicationtracker.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -25,7 +25,8 @@ public class Company {
     @Column(name = "company_website")
     private String companyWebsite;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne()
     @JoinColumn(name = "appuser_id", referencedColumnName = "id")
     private AppUser appUser;
 
