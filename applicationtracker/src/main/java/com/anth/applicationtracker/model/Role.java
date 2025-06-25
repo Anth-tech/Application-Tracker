@@ -1,7 +1,6 @@
 package com.anth.applicationtracker.model;
 
 import jakarta.persistence.*;
-import com.anth.applicationtracker.model.ERole;
 
 @Entity
 @Table(name = "roles")

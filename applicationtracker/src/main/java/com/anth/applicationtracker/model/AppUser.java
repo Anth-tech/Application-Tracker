@@ -3,8 +3,14 @@ package com.anth.applicationtracker.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-@Table(name = "appuser")
+@Table(name = "appuser", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class AppUser {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -19,15 +25,16 @@ public class AppUser {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username")
     private String username;
 
     @JsonIgnore
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "appuser_id"))
+    private Set<Role> roles = new HashSet<>();
 
     protected AppUser() {}
     private AppUser(Builder builder) {
@@ -35,7 +42,7 @@ public class AppUser {
         this.lastName = builder.lastName;
         this.email = builder.email;
         this.username = builder.username;
-        this.role = builder.role;
+        this.password = builder.password;
     }
 
     public Long getId() {
@@ -50,14 +57,14 @@ public class AppUser {
     public String getEmail() {
         return email;
     }
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
     public String getPassword() {
         return password;
     }
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -74,8 +81,8 @@ public class AppUser {
     public void setPassword(String password) {
         this.password = password;
     }
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public static class Builder {
@@ -83,7 +90,7 @@ public class AppUser {
         private String lastName;
         private String username;
         private String email;
-        private String role;
+        private String password;
 
         public Builder firstName(String firstName) {
             this.firstName = firstName;
@@ -101,8 +108,8 @@ public class AppUser {
             this.email = email;
             return this;
         }
-        public Builder role(String role) {
-            this.role = role;
+        public Builder password(String password) {
+            this.password = password;
             return this;
         }
 
