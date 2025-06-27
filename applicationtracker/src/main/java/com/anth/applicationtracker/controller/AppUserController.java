@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/appusers")
+@RequestMapping("/api/account")
 public class AppUserController {
 
     private final AppUserRepository appUserRepository;
