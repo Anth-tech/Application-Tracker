@@ -37,7 +37,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
-    private AuthController(AuthenticationManager authenticationManager, AppUserRepository appUserRepository,
+    public AuthController(AuthenticationManager authenticationManager, AppUserRepository appUserRepository,
                            RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.appUserRepository = appUserRepository;
@@ -108,4 +108,5 @@ public class AuthController {
         appUserRepository.save(appUser);
         return ResponseEntity.ok(new MessageResponse("User " + appUser.getUsername() + " successfully registered"));
     }
+
 }

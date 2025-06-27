@@ -1,5 +1,6 @@
 package com.anth.applicationtracker.controller;
 
+import com.anth.applicationtracker.annotation.CurrentUser;
 import com.anth.applicationtracker.model.AppUser;
 import com.anth.applicationtracker.model.Application;
 import com.anth.applicationtracker.repo.AppUserRepository;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,8 +30,8 @@ public class ApplicationController {
     }
 
     @GetMapping()
-    private ResponseEntity<List<Application>> findAll(Pageable pageable, Principal principal) {
-        Page<Application> page = applicationRepository.findByAppUser_Username(principal.getName(),
+    private ResponseEntity<List<Application>> findAll(Pageable pageable, @CurrentUser String username) {
+        Page<Application> page = applicationRepository.findByAppUser_Username(username,
                 PageRequest.of(
                         pageable.getPageNumber(),
                         pageable.getPageSize(),
@@ -42,8 +42,8 @@ public class ApplicationController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Application> findById(@PathVariable Long id, Principal principal) {
-        Application application = findApplication(id, principal);
+    private ResponseEntity<Application> findById(@PathVariable Long id, @CurrentUser String username) {
+        Application application = findApplication(id, username);
         if (application != null) {
             return ResponseEntity.ok(application);
         } else {
@@ -52,8 +52,9 @@ public class ApplicationController {
     }
 
     @PostMapping
-    private ResponseEntity<Void> createApplication(@RequestBody Application newApplicationRequest, UriComponentsBuilder ucb, Principal principal) {
-        Optional<AppUser> currentUser = appUserRepository.findByUsername(principal.getName());
+    private ResponseEntity<Void> createApplication(@RequestBody Application newApplicationRequest,
+                                                   UriComponentsBuilder ucb, @CurrentUser String username) {
+        Optional<AppUser> currentUser = appUserRepository.findByUsername(username);
         if (currentUser.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -67,8 +68,8 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Void> deleteApplication(@PathVariable Long id, Principal principal) {
-        Application application = findApplication(id, principal);
+    private ResponseEntity<Void> deleteApplication(@PathVariable Long id, @CurrentUser String username) {
+        Application application = findApplication(id, username);
         if (application != null) {
             applicationRepository.deleteById(id);
             return ResponseEntity.noContent().build();
@@ -78,8 +79,9 @@ public class ApplicationController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<Void> updateApplication(@RequestBody Application applicationUpdated, @PathVariable Long id, Principal principal) {
-        Application applicationExisting = findApplication(id, principal);
+    private ResponseEntity<Void> updateApplication(@RequestBody Application applicationUpdated, @PathVariable Long id,
+                                                   @CurrentUser String username) {
+        Application applicationExisting = findApplication(id, username);
         if (applicationExisting != null && Objects.equals(applicationExisting.getId(), id)) {
             applicationRepository.save(updateApplicationHelper(applicationExisting, applicationUpdated));
             return ResponseEntity.noContent().build();
@@ -88,8 +90,8 @@ public class ApplicationController {
         }
     }
 
-    private Application findApplication(Long id, Principal principal) {
-        return applicationRepository.findByIdAndAppUser_Username(id, principal.getName());
+    private Application findApplication(Long id, String username) {
+        return applicationRepository.findByIdAndAppUser_Username(id, username);
     }
 
     private Application updateApplicationHelper(Application prevApplication, Application newApplication) {

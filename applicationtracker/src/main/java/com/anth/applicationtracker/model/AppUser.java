@@ -75,7 +75,7 @@ public class AppUser {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void setUserName(String userName) {
+    public void setUsername(String userName) {
         this.username = userName;
     }
     public void setPassword(String password) {
