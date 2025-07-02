@@ -5,6 +5,7 @@ import com.anth.applicationtracker.model.Company;
 import com.anth.applicationtracker.repo.AppUserRepository;
 import com.anth.applicationtracker.repo.ApplicationRepository;
 import com.anth.applicationtracker.repo.CompanyRepository;
+import com.anth.applicationtracker.repo.RoleRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,12 +25,15 @@ public class ApplicationtrackerApplication {
 	private final ApplicationRepository applicationRepository;
 	private final CompanyRepository companyRepository;
 	private final AppUserRepository appUserRepository;
+	private final RoleRepository roleRepository;
 
 	public ApplicationtrackerApplication(ApplicationRepository applicationRepository,
-										 CompanyRepository companyRepository, AppUserRepository appUserRepository) {
+										 CompanyRepository companyRepository, AppUserRepository appUserRepository,
+										 RoleRepository roleRepository) {
 		this.applicationRepository = applicationRepository;
 		this.companyRepository = companyRepository;
 		this.appUserRepository = appUserRepository;
+		this.roleRepository = roleRepository;
 	}
 
 	public static void main(String[] args) {
@@ -37,28 +41,4 @@ public class ApplicationtrackerApplication {
 		logger.info("ApplicationtrackerApplication started");
 	}
 
-	/*
-	@Override
-	public void run(String... args) throws Exception {
-		Company company1 = new Company("TechCompany", "techcompany@gmail.com", "Clarksville, TN", "www.techcompany.com");
-		Company company2 = new Company("TechieCompany", "techiecompany@aol.com", "Nashville, TN", "www.techiecompany.com");
-		companyRepository.saveAll(Arrays.asList(company1, company2));
-
-		Application application1 = new Application("Java Backend Developer", "Clarksville, TN",
-				"LinkedIn", company1, "Pending", "In-Person",
-				"Sent", new Date(System.currentTimeMillis()));
-		Application application2 = new Application("Java FullStack Developer", "Nashville, TN",
-				"LinkedIn", company2, "Pending", "Remote",
-				"Sent", new Date(System.currentTimeMillis()));
-		applicationRepository.saveAll(Arrays.asList(application1, application2));
-
-		for (Application application : applicationRepository.findAll()) {
-			logger.info("job title: {}, location: {}, submission site: {}, company name: {}, response: {}, " +
-					"job type: {}, submission status: {}, submission date: {}",
-					application.getJobTitle(), application.getLocation(), application.getSubmissionSite(),
-					application.getCompany(), application.getResponse(), application.getJobType(),
-					application.getSubmissionStatus(), application.getSubmitDate());
-		}
-	}
-	 */
 }

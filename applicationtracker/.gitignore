@@ -35,3 +35,17 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Java Build files
+/target/
+/build/
+
+#
+.DS_Store
+Thumbs.db
+
+# Environment
+*.env
+.env
+application.properties
+application-test.properties
